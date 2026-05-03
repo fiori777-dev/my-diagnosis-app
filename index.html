@@ -6,655 +6,106 @@
 
   <!-- ===================== SEO ===================== -->
   <title>AI性格診断メーカー｜5問で分かるあなたの本質タイプ</title>
-  <meta name="description" content="たった5問の質問に答えるだけ。AIがあなたの性格を深層分析して、あなただけの「性格タイプ」を診断します。診断結果はSNSでシェアしよう！" />
-  <meta name="keywords" content="性格診断, AI診断, 16タイプ, 性格テスト, 無料診断" />
+  <meta name="description" content="たった5問の質問に答えるだけ。AIがあなたの性格を深層分析して、あなただけの「性格タイプ」を診断します。" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://yourdomain.com/" />
-
-  <!-- ===================== OGP ===================== -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="AI性格診断メーカー｜5問で分かるあなたの本質タイプ" />
-  <meta property="og:description" content="たった5問でAIがあなたの性格を深層分析。あなたは何タイプ？無料で今すぐ診断！" />
-  <meta property="og:url" content="https://yourdomain.com/" />
-  <meta property="og:image" content="https://yourdomain.com/ogp.png" />
-  <meta property="og:site_name" content="AI性格診断メーカー" />
-  <meta property="og:locale" content="ja_JP" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@youraccount" />
-  <meta name="twitter:title" content="AI性格診断メーカー｜5問で分かるあなたの本質タイプ" />
-  <meta name="twitter:description" content="たった5問でAIがあなたの性格を深層分析。無料で今すぐ診断！" />
-  <meta name="twitter:image" content="https://yourdomain.com/ogp.png" />
 
   <!-- ===================== Fonts ===================== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 
-  <!-- ===================== Google AdSense ===================== -->
-  <!-- ▼ 本番運用時: ca-pub-XXXXXXX をご自身のIDに変更してください -->
-  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXX" crossorigin="anonymous"></script> -->
-
   <style>
-    /* ============================================================
-       RESET & BASE
-    ============================================================ */
+    /* RESET & BASE */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #05050f;
-      --surface:   rgba(255,255,255,0.04);
-      --border:    rgba(255,255,255,0.09);
-      --text:      #f0eeff;
-      --muted:     rgba(255,255,255,0.4);
-      --accent1:   #7c3aed;
-      --accent2:   #db2777;
-      --grad:      linear-gradient(135deg, var(--accent1), var(--accent2));
-      --radius:    18px;
-      --max-w:     560px;
+      --bg: #05050f;
+      --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.09);
+      --text: #f0eeff;
+      --muted: rgba(255,255,255,0.4);
+      --accent1: #7c3aed;
+      --accent2: #db2777;
+      --grad: linear-gradient(135deg, var(--accent1), var(--accent2));
+      --radius: 18px;
+      --max-w: 560px;
     }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-    html { scroll-behavior: smooth; }
+    /* BACKGROUND */
+    #bg-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; }
+    .orb-a { width: 500px; height: 500px; background: radial-gradient(circle, #7c3aed 0%, transparent 70%); top: -150px; left: -150px; }
+    .orb-b { width: 400px; height: 400px; background: radial-gradient(circle, #db2777 0%, transparent 70%); bottom: -100px; right: -100px; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Noto Sans JP', sans-serif;
-      min-height: 100vh;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+    #app { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: 0 16px 60px; }
+    header { width: 100%; max-width: var(--max-w); padding: 24px 0; display: flex; align-items: center; justify-content: center; }
+    .site-logo { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    /* ============================================================
-       BACKGROUND DECORATION
-    ============================================================ */
-    #bg-canvas {
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 0;
-      overflow: hidden;
-    }
-    .orb {
-      position: absolute; border-radius: 50%;
-      filter: blur(90px); opacity: 0.35;
-    }
-    .orb-a {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
-      top: -150px; left: -150px;
-      animation: driftA 12s ease-in-out infinite alternate;
-    }
-    .orb-b {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, #db2777 0%, transparent 70%);
-      bottom: -100px; right: -100px;
-      animation: driftB 15s ease-in-out infinite alternate;
-    }
-    .orb-c {
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
-      top: 50%; left: 50%; transform: translate(-50%,-50%);
-      animation: driftC 10s ease-in-out infinite alternate;
-    }
-    @keyframes driftA { to { transform: translate(60px, 80px); } }
-    @keyframes driftB { to { transform: translate(-50px, -60px); } }
-    @keyframes driftC { to { transform: translate(30px, -40px) scale(1.2); } }
+    /* AD SLOT: 忍者AdMax用 */
+    .ad-slot { width: 100%; max-width: var(--max-w); margin: 24px 0; text-align: center; display: flex; justify-content: center; }
 
-    /* Star field */
-    .star {
-      position: absolute; border-radius: 50%;
-      background: #fff; animation: twinkle ease-in-out infinite;
-    }
-    @keyframes twinkle {
-      0%,100% { opacity: 0.05; }
-      50% { opacity: 0.6; }
-    }
-
-    /* ============================================================
-       LAYOUT
-    ============================================================ */
-    #app {
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column;
-      align-items: center;
-      padding: 0 16px 60px;
-    }
-
-    /* ============================================================
-       HEADER
-    ============================================================ */
-    header {
-      width: 100%; max-width: var(--max-w);
-      padding: 24px 0 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .site-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 15px; font-weight: 800;
-      letter-spacing: 0.06em;
-      background: var(--grad);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    /* ============================================================
-       AD PLACEHOLDER
-    ============================================================ */
-    .ad-slot {
-      width: 100%; max-width: var(--max-w);
-      margin: 20px 0;
-      border: 1px dashed rgba(255,255,255,0.12);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.02);
-      display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,0.18);
-      font-size: 11px; letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: border-color 0.3s;
-    }
-    .ad-slot-top    { height: 90px; }
-    .ad-slot-mid    { height: 60px; margin: 12px 0; }
-    .ad-slot-bottom { height: 90px; }
-    /* 本番: .ad-slot の中身を AdSense コードに置き換えてください */
-
-    /* ============================================================
-       CARD
-    ============================================================ */
-    .card {
-      width: 100%; max-width: var(--max-w);
-      background: var(--surface);
-      backdrop-filter: blur(24px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 40px 36px;
-      animation: slideUp 0.5s cubic-bezier(.22,1,.36,1) both;
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ============================================================
-       INTRO
-    ============================================================ */
-    .badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(124,58,237,0.18);
-      border: 1px solid rgba(124,58,237,0.35);
-      border-radius: 100px; padding: 5px 16px;
-      font-size: 10px; font-weight: 700;
-      color: #c4b5fd; letter-spacing: 0.15em; text-transform: uppercase;
-      margin-bottom: 22px;
-    }
-    .hero-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(30px, 8vw, 46px);
-      font-weight: 800; line-height: 1.1; margin-bottom: 6px;
-      background: linear-gradient(140deg, #fff 40%, #c4b5fd);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .hero-sub {
-      font-size: 14px; color: var(--muted);
-      line-height: 1.8; margin-bottom: 32px;
-    }
-    .stats-row {
-      display: flex; gap: 12px; margin-bottom: 32px;
-    }
-    .stat {
-      flex: 1; background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border); border-radius: 12px;
-      padding: 14px 10px; text-align: center;
-    }
-    .stat-n {
-      font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800;
-      background: var(--grad);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .stat-l { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-    .btn-primary {
-      display: block; width: 100%;
-      padding: 18px; border: none; border-radius: 14px;
-      background: var(--grad); color: #fff;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      letter-spacing: 0.04em; position: relative; overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(rgba(255,255,255,0.15), transparent);
-      opacity: 0; transition: opacity 0.2s;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(124,58,237,0.45); }
-    .btn-primary:hover::after { opacity: 1; }
-    .btn-primary:active { transform: translateY(0); }
-
-    .note {
-      margin-top: 16px; text-align: center;
-      font-size: 11px; color: rgba(255,255,255,0.2);
-    }
-
-    /* ============================================================
-       PROGRESS
-    ============================================================ */
-    .progress-wrap { margin-bottom: 28px; }
-    .progress-meta {
-      display: flex; justify-content: space-between;
-      font-size: 11px; color: var(--muted); margin-bottom: 8px;
-    }
-    .progress-track {
-      height: 3px; background: rgba(255,255,255,0.08);
-      border-radius: 100px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: var(--grad);
-      border-radius: 100px; transition: width 0.45s cubic-bezier(.22,1,.36,1);
-    }
-
-    /* ============================================================
-       QUIZ
-    ============================================================ */
-    .q-label { font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
-    .q-text  { font-size: clamp(17px, 4.5vw, 21px); font-weight: 700; line-height: 1.55; margin-bottom: 28px; }
-    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .opt-btn {
-      padding: 16px 14px; background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border); border-radius: 14px;
-      color: var(--text); font-family: 'Noto Sans JP', sans-serif;
-      font-size: 13px; font-weight: 700; cursor: pointer;
-      text-align: left; line-height: 1.5;
-      transition: background 0.18s, border-color 0.18s, transform 0.15s;
-    }
-    .opt-btn:hover    { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.5); transform: translateY(-2px); }
-    .opt-btn.selected { background: rgba(124,58,237,0.32); border-color: #7c3aed; transform: scale(0.97); }
-
-    /* ============================================================
-       LOADING
-    ============================================================ */
-    .loading-wrap { text-align: center; padding: 24px 0; }
-    .loading-orb {
-      width: 84px; height: 84px; border-radius: 50%;
-      background: var(--grad); margin: 0 auto 24px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 34px;
-      animation: pulse 1.6s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { transform: scale(1);   box-shadow: 0 0 20px rgba(124,58,237,0.3); }
-      50%      { transform: scale(1.1); box-shadow: 0 0 48px rgba(124,58,237,0.7); }
-    }
-    .loading-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .loading-sub   { font-size: 13px; color: var(--muted); }
-    .dots          { display: inline-block; min-width: 24px; text-align: left; }
-
-    /* ============================================================
-       RESULT
-    ============================================================ */
-    .color-stripe {
-      height: 4px; border-radius: 100px 100px 0 0;
-      margin: -40px -36px 28px;
-    }
-    .result-top { text-align: center; margin-bottom: 28px; }
-    .result-emoji {
-      font-size: 64px; display: block; margin-bottom: 14px;
-      animation: bounceIn 0.6s cubic-bezier(.34,1.56,.64,1) both;
-    }
-    @keyframes bounceIn {
-      from { transform: scale(0.3); opacity: 0; }
-      to   { transform: scale(1);   opacity: 1; }
-    }
-    .result-type {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(22px, 6vw, 32px); font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .result-tagline { font-size: 13px; color: var(--muted); }
-
-    .rsec {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 14px; padding: 18px; margin-bottom: 12px;
-    }
-    .rsec-label {
-      font-size: 10px; color: var(--muted);
-      letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px;
-    }
-    .rsec-text { font-size: 14px; line-height: 1.85; color: rgba(255,255,255,0.85); }
-
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tag  { padding: 5px 13px; border-radius: 100px; font-size: 12px; font-weight: 700; }
-    .tag-g { background: rgba(34,197,94,0.14); border: 1px solid rgba(34,197,94,0.3); color: #86efac; }
-    .tag-r { background: rgba(251,146,60,0.14); border: 1px solid rgba(251,146,60,0.3); color: #fdba74; }
-
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-    .info-box  { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
-    .info-lbl  { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; margin-bottom: 6px; }
-    .info-val  { font-size: 13px; font-weight: 700; line-height: 1.5; }
-
-    /* ============================================================
-       ACTION BUTTONS
-    ============================================================ */
-    .action-row { display: flex; gap: 10px; margin-top: 20px; }
-    .btn-x {
-      flex: 2; padding: 16px; border: none; border-radius: 14px;
-      background: #000; color: #fff;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 15px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-x:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.6); }
-    .btn-retry {
-      flex: 1; padding: 16px; border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-retry:hover { background: rgba(255,255,255,0.12); }
-
-    /* X logo SVG shorthand */
-    .x-logo { width: 16px; height: 16px; fill: #fff; flex-shrink: 0; }
-
-    /* ============================================================
-       FOOTER
-    ============================================================ */
-    footer {
-      width: 100%; max-width: var(--max-w);
-      margin-top: 40px; padding-top: 24px;
-      border-top: 1px solid var(--border);
-      text-align: center; font-size: 11px; color: rgba(255,255,255,0.2);
-    }
-    footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
-    footer a:hover { color: rgba(255,255,255,0.6); }
-
-    /* ============================================================
-       RESPONSIVE
-    ============================================================ */
-    @media (max-width: 420px) {
-      .card { padding: 32px 20px; }
-      .color-stripe { margin: -32px -20px 24px; }
-      .options  { grid-template-columns: 1fr; }
-      .info-grid{ grid-template-columns: 1fr; }
-      .stats-row{ flex-direction: column; gap: 8px; }
-      .action-row{ flex-direction: column; }
-      .btn-x, .btn-retry { flex: unset; }
-    }
+    .card { width: 100%; max-width: var(--max-w); background: var(--surface); backdrop-filter: blur(24px); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 36px; }
+    .hero-title { font-family: 'Syne', sans-serif; font-size: clamp(30px, 8vw, 46px); font-weight: 800; line-height: 1.1; margin-bottom: 24px; background: linear-gradient(140deg, #fff 40%, #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .btn-primary { display: block; width: 100%; padding: 18px; border: none; border-radius: 14px; background: var(--grad); color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
+    .btn-primary:hover { transform: translateY(-2px); }
   </style>
 </head>
 <body>
 
-<!-- ==================== BACKGROUND ==================== -->
 <div id="bg-canvas">
   <div class="orb orb-a"></div>
   <div class="orb orb-b"></div>
-  <div class="orb orb-c"></div>
-  <!-- Stars injected by JS -->
 </div>
 
-<!-- ==================== MAIN ==================== -->
 <div id="app">
+  <header><span class="site-logo">✦ AI SHINDAN</span></header>
 
-  <header>
-    <span class="site-logo">✦ AI SHINDAN</span>
-  </header>
-
-  <!-- AD TOP -->
-  <div class="ad-slot ad-slot-top" id="ad-top">
-    <!-- ▼ Google AdSense コードをここに貼り付けてください
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    -->
-    広告スペース（728×90 / レスポンシブ）
+  <!-- 上部広告エリア -->
+  <div class="ad-slot">
+    <!-- admax -->
+    <script src="https://adm.shinobi.jp/s/88f52a87985de7fcb2b4f158f8599c16"></script>
+    <!-- admax -->
   </div>
 
-  <!-- ==================== SCREENS ==================== -->
+  <!-- メインコンテンツ -->
   <div id="screen-intro" class="card">
-    <div class="badge">✦ AI Powered &nbsp;·&nbsp; Free</div>
     <div class="hero-title">AI性格<br>診断メーカー</div>
-    <p class="hero-sub">たった5問に答えるだけ。<br>AIがあなたの本質的な性格タイプを深層分析します。</p>
-    <div class="stats-row">
-      <div class="stat"><div class="stat-n">5問</div><div class="stat-l">質問数</div></div>
-      <div class="stat"><div class="stat-n">∞型</div><div class="stat-l">診断タイプ</div></div>
-      <div class="stat"><div class="stat-n">無料</div><div class="stat-l">完全無料</div></div>
-    </div>
+    <p style="margin-bottom: 24px; color: var(--muted);">たった5問であなたの深層心理をAIが解明します。</p>
     <button class="btn-primary" onclick="startQuiz()">診断スタート →</button>
-    <p class="note">個人情報の入力は不要です</p>
   </div>
 
   <div id="screen-quiz" class="card" style="display:none">
-    <div class="progress-wrap">
-      <div class="progress-meta">
-        <span id="q-count">1 / 5</span>
-        <span id="q-pct">20%</span>
-      </div>
-      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:20%"></div></div>
-    </div>
-    <div class="q-label" id="q-label">Question 1</div>
-    <div class="q-text"  id="q-text"></div>
-    <div class="options" id="options"></div>
-  </div>
-
-  <!-- AD MID (quiz中) -->
-  <div class="ad-slot ad-slot-mid" id="ad-mid" style="display:none">
-    <!-- ▼ AdSenseコード -->
-    広告スペース（320×50）
+    <div id="q-text" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;"></div>
+    <div id="options" style="display: grid; gap: 12px;"></div>
   </div>
 
   <div id="screen-loading" class="card" style="display:none">
-    <div class="loading-wrap">
-      <div class="loading-orb">🔮</div>
-      <div class="loading-title">AIが分析中<span class="dots" id="dots"></span></div>
-      <p class="loading-sub">あなただけの診断結果を生成しています</p>
-    </div>
+    <div style="text-align:center;">AIが分析中...</div>
   </div>
 
   <div id="screen-result" class="card" style="display:none"></div>
 
-  <!-- AD BOTTOM -->
-  <div class="ad-slot ad-slot-bottom" id="ad-bottom">
-    <!-- ▼ AdSenseコード -->
-    広告スペース（728×90 / レスポンシブ）
+  <!-- 下部広告エリア -->
+  <div class="ad-slot">
+    <!-- admax -->
+    <script src="https://adm.shinobi.jp/s/88f52a87985de7fcb2b4f158f8599c16"></script>
+    <!-- admax -->
   </div>
 
-  <footer>
-    <p style="margin-bottom:8px">
-      <a href="#">プライバシーポリシー</a> &nbsp;|&nbsp;
-      <a href="#">利用規約</a> &nbsp;|&nbsp;
-      <a href="#">お問い合わせ</a>
-    </p>
-    <p>© 2025 AI性格診断メーカー. All rights reserved.</p>
+  <footer style="margin-top: 40px; color: var(--muted); font-size: 12px;">
+    © 2026 AI性格診断メーカー
   </footer>
-
-</div><!-- /#app -->
-
+</div>
 
 <script>
-/* ============================================================
-   DATA
-============================================================ */
-const QUESTIONS = [
-  {
-    text: "週末、理想の過ごし方は？",
-    opts: [
-      { label: "🏠 家でひとりまったり",     val: "introvert_calm" },
-      { label: "🎉 友達と賑やかに外出",     val: "extrovert_social" },
-      { label: "📚 新しいことを学ぶ",       val: "introvert_curious" },
-      { label: "🌿 自然の中でリフレッシュ", val: "extrovert_nature" },
-    ]
-  },
-  {
-    text: "問題が起きたとき、あなたは？",
-    opts: [
-      { label: "🧠 論理的に分析する",       val: "thinking_logic" },
-      { label: "❤️ 感情を優先して動く",     val: "feeling_empathy" },
-      { label: "📋 計画を立ててから行動",   val: "thinking_plan" },
-      { label: "⚡ 直感でとりあえず動く",   val: "feeling_instinct" },
-    ]
-  },
-  {
-    text: "あなたにとって「理想の仕事」は？",
-    opts: [
-      { label: "🎨 クリエイティブな表現",   val: "creative_art" },
-      { label: "💼 人をリードするリーダー", val: "leader_social" },
-      { label: "🔬 深く研究・探求する",     val: "analyst_deep" },
-      { label: "🤝 誰かを支えるサポート",   val: "support_care" },
-    ]
-  },
-  {
-    text: "あなたの「エネルギー源」は？",
-    opts: [
-      { label: "🌟 人との交流・会話",       val: "energy_social" },
-      { label: "🧘 静かなひとり時間",       val: "energy_solo" },
-      { label: "🏆 目標達成の達成感",       val: "energy_achieve" },
-      { label: "💡 アイデアが生まれる瞬間", val: "energy_idea" },
-    ]
-  },
-  {
-    text: "SNSであなたを表すなら？",
-    opts: [
-      { label: "📸 毎日投稿・発信好き",     val: "sns_active" },
-      { label: "👀 見るだけ・ROM派",        val: "sns_passive" },
-      { label: "🔥 バズらせたい・影響力重視",val: "sns_influence" },
-      { label: "💬 少数の仲間とだけ繋がる", val: "sns_close" },
-    ]
+  // 以前作成したJavaScriptのロジック（質問データや表示の切り替え関数）をここに統合して使用してください
+  function startQuiz() {
+    document.getElementById('screen-intro').style.display = 'none';
+    document.getElementById('screen-quiz').style.display = 'block';
+    // 実際の診断処理（renderQuestionなど）を呼び出す
   }
-];
-
-const VAL_MAP = {
-  introvert_calm:    "内向的・落ち着き好き",
-  extrovert_social:  "外向的・社交的",
-  introvert_curious: "内向的・知的好奇心旺盛",
-  extrovert_nature:  "外向的・自然派",
-  thinking_logic:    "論理思考重視",
-  feeling_empathy:   "感情・共感重視",
-  thinking_plan:     "計画的・分析的",
-  feeling_instinct:  "直感的・行動派",
-  creative_art:      "クリエイティブ志向",
-  leader_social:     "リーダーシップ志向",
-  analyst_deep:      "研究・探求志向",
-  support_care:      "サポート・ケア志向",
-  energy_social:     "社交でエネルギー補充",
-  energy_solo:       "孤独でエネルギー補充",
-  energy_achieve:    "達成感でエネルギー補充",
-  energy_idea:       "アイデアでエネルギー補充",
-  sns_active:        "SNS積極発信派",
-  sns_passive:       "SNS観察派",
-  sns_influence:     "SNSインフルエンサー志向",
-  sns_close:         "SNS少数精鋭派",
-};
-
-const FALLBACK = {
-  type: "自由なクリエイター型",
-  emoji: "🦋",
-  tagline: "枠にとらわれない独自の感性の持ち主",
-  description: "あなたは独自の視点と豊かな感受性で世界を見ています。固定観念に縛られず、直感と創造力を武器に前へ進む力があります。周囲にインスピレーションを与える存在です。",
-  strengths: ["豊かな創造力", "高い適応力", "独創的な発想力"],
-  weaknesses: ["計画が苦手になりがち", "飽きやすい傾向"],
-  idealJob: "クリエイター・デザイナー・起業家",
-  loveStyle: "自由と絆を両立する深い愛情派",
-  famousPerson: "スティーブ・ジョブズ",
-  color: "#a855f7",
-  compatibleType: "戦略家アナリスト型",
-};
-
-/* ============================================================
-   STATE
-============================================================ */
-let currentQ  = 0;
-let answers   = [];
-let dotsTimer = null;
-let resultData = null;
-
-/* ============================================================
-   STARS
-============================================================ */
-(function initStars() {
-  const canvas = document.getElementById('bg-canvas');
-  for (let i = 0; i < 70; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = 1 + Math.random() * 2;
-    Object.assign(s.style, {
-      width:  size + 'px', height: size + 'px',
-      left:   Math.random() * 100 + '%',
-      top:    Math.random() * 100 + '%',
-      animationDuration: (2 + Math.random() * 4) + 's',
-      animationDelay:    (Math.random() * 5) + 's',
-    });
-    canvas.appendChild(s);
-  }
-})();
-
-/* ============================================================
-   SCREEN CONTROL
-============================================================ */
-function show(id) {
-  ['screen-intro','screen-quiz','screen-loading','screen-result'].forEach(s => {
-    document.getElementById(s).style.display = s === id ? 'block' : 'none';
-  });
-  document.getElementById('ad-mid').style.display = (id === 'screen-quiz') ? 'flex' : 'none';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-/* ============================================================
-   QUIZ
-============================================================ */
-function startQuiz() {
-  currentQ = 0; answers = [];
-  show('screen-quiz');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const q = QUESTIONS[currentQ];
-  const total = QUESTIONS.length;
-  const pct   = Math.round(((currentQ + 1) / total) * 100);
-
-  document.getElementById('q-count').textContent = `${currentQ + 1} / ${total}`;
-  document.getElementById('q-pct').textContent   = `${pct}%`;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('q-label').textContent = `Question ${currentQ + 1}`;
-  document.getElementById('q-text').textContent  = q.text;
-
-  const optWrap = document.getElementById('options');
-  optWrap.innerHTML = '';
-  q.opts.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className   = 'opt-btn';
-    btn.textContent = opt.label;
-    btn.onclick     = () => selectAnswer(opt.val, btn);
-    optWrap.appendChild(btn);
-  });
-}
-
-function selectAnswer(val, btn) {
-  // Disable all buttons
-  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
-  btn.classList.add('selected');
-  answers.push(val);
-
-  setTimeout(() => {
-    currentQ++;
-    if (currentQ < QUESTIONS.length) {
-      renderQuestion();
-    } else {
-      show('screen-loading');
-      startDots();
-      fetchResult();
-    }
-  }, 380);
-}
-
-/* ============================================================
-   LOADING DOTS
-============================================================ */
-function startDots() {
-  let n = 0;
-  dotsTimer = setInterval(() => {
-    n = (n + 1) % 4;
-    document.getElementById('dots').textContent = '.'.repeat(n);
-  }, 500);
+</script>
+</body>
+</html>
 }
 function stopDots() { clearInterval(dotsTimer); }
